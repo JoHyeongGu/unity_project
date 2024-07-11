@@ -1,0 +1,64 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Hero : MonoBehaviour
+{
+    [SerializeField]
+    private bool autoMode = true;
+    [SerializeField]
+    private float speed = 3;
+    [SerializeField]
+    private Animator ani;
+    private Vector3 moveTo = new(0f, 0f, 0f);
+
+    void Start()
+    {
+        if (autoMode)
+        {
+            AutoMove();
+        }
+    }
+
+    void Update()
+    {
+        if (!autoMode)
+        {
+            Controlled();
+        }
+        Rotate();
+        transform.position += moveTo * speed * Time.deltaTime;
+    }
+
+    private void AutoMove()
+    {
+        StartCoroutine(RandomMove());
+    }
+
+    IEnumerator RandomMove()
+    {
+        while (autoMode)
+        {
+            float horizonInput = Random.Range(-1, 2);
+            float verticalInput = Random.Range(-1, 2);
+            Vector3 moving = moveTo;
+            moveTo = new(horizonInput, verticalInput, 0f);
+            yield return new WaitForSeconds(Random.Range(0f, 2f));
+        }
+    }
+
+    private void Controlled()
+    {
+        StopCoroutine("ChangeMove");
+        float horizonInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
+        moveTo = new(horizonInput, verticalInput, 0f);
+    }
+
+    private void Rotate()
+    {
+        ani.SetInteger("vertical", (int)moveTo.y);
+        ani.SetInteger("horizontal", (int)moveTo.x);
+    }
+
+}
