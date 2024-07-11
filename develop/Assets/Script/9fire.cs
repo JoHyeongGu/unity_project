@@ -41,7 +41,6 @@ public class Hero : MonoBehaviour
         {
             float horizonInput = Random.Range(-1, 2);
             float verticalInput = Random.Range(-1, 2);
-            Vector3 moving = moveTo;
             moveTo = new(horizonInput, verticalInput, 0f);
             yield return new WaitForSeconds(Random.Range(0f, 2f));
         }
@@ -53,12 +52,16 @@ public class Hero : MonoBehaviour
         float horizonInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
         moveTo = new(horizonInput, verticalInput, 0f);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ani.SetTrigger("attack");
+        }
     }
 
     private void Rotate()
     {
         ani.SetInteger("vertical", (int)moveTo.y);
-        ani.SetInteger("horizontal", (int)moveTo.x);
+        ani.SetInteger("horizonal", (int)moveTo.x);
     }
 
 }
