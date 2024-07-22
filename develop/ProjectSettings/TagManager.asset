@@ -7,6 +7,8 @@ TagManager:
   - Tower
   - Intruder
   - IntruderView
+  - TowerView
+  - Border
   layers:
   - Default
   - TransparentFX

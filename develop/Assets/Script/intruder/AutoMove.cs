@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AutoMove : MonoBehaviour
@@ -14,7 +13,7 @@ public class AutoMove : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(RandomMove());
+        StartCoroutine(AutoMoving());
     }
 
     void Update()
@@ -22,46 +21,75 @@ public class AutoMove : MonoBehaviour
         Rotate();
         transform.position += moveTo * speed * Time.deltaTime;
     }
+    private void Rotate()
+    {
+        ani.SetInteger("vertical", (int)moveTo.y);
+        ani.SetInteger("horizonal", (int)moveTo.x);
+    }
 
-    IEnumerator RandomMove()
+    IEnumerator AutoMoving()
     {
         while (true)
         {
             if (purpose == null)
             {
-                float horizonInput = Random.Range(-1, 2);
-                float verticalInput = Random.Range(-1, 2);
-                moveTo = new(horizonInput, verticalInput, 0f);
+                RandomMove();
                 yield return new WaitForSeconds(Random.Range(1f, 3f));
             }
-            else
+            else if (purpose.CompareTag("Tower"))
             {
-                yield return new WaitForSeconds(0.5f);
-                Debug.Log($"Move to {purpose.transform.position}");
                 MoveToPurpose();
+                yield return new WaitForSeconds(0.5f);
+            }
+            else if (purpose.CompareTag("Border"))
+            {
+                Debug.Log("before moving");
+                MoveToPurpose(desPos: new Vector3(0f, 0f, 0f));
+                Debug.Log("before cooltime");
+                yield return new WaitForSeconds(Random.Range(5f, 9f));
+                Debug.Log("after cooltime");
             }
         }
     }
 
-    public void SetPurpose(GameObject newPurpose)
+    void RandomMove()
     {
-        Debug.Log($"purpose change to {newPurpose}");
-        purpose = newPurpose;
+        float horizonInput = Random.Range(-1, 2);
+        float verticalInput = Random.Range(-1, 2);
+        moveTo = new(horizonInput, verticalInput, 0f);
     }
 
-    void MoveToPurpose()
+    public void SetPurpose(GameObject newPurpose)
+    {
+        purpose = newPurpose;
+    }
+    public GameObject GetPurpose()
+    {
+        return purpose;
+    }
+
+    public void SetMoveTo(Vector3 vector)
+    {
+        moveTo = vector;
+    }
+
+    void MoveToPurpose(bool reverse = false, Vector3? desPos = null)
     {
         Vector3 purposePos = purpose.transform.position;
+        if (desPos != null)
+        {
+            purposePos = (Vector3)desPos;
+        }
         Vector3 myPos = transform.position;
         float differX = myPos.x - purposePos.x;
         float differY = myPos.y - purposePos.y;
         if (differX < -1)
         {
-            moveTo.x = 1;
+            moveTo.x = reverse ? -1 : 1;
         }
         else if (differX > 1)
         {
-            moveTo.x = -1;
+            moveTo.x = reverse ? 1 : -1;
         }
         else
         {
@@ -69,17 +97,16 @@ public class AutoMove : MonoBehaviour
         }
         if (differY < -1)
         {
-            moveTo.y = 1;
+            moveTo.y = reverse ? -1 : 1;
         }
         else if (differY > 1)
         {
-            moveTo.y = -1;
+            moveTo.y = reverse ? 1 : -1;
         }
         else
         {
             moveTo.y = 0;
         }
-        Debug.Log(moveTo);
     }
 
     // private void Controlled()
@@ -93,11 +120,5 @@ public class AutoMove : MonoBehaviour
     //         ani.SetTrigger("attack");
     //     }
     // }
-
-    private void Rotate()
-    {
-        ani.SetInteger("vertical", (int)moveTo.y);
-        ani.SetInteger("horizonal", (int)moveTo.x);
-    }
 
 }
