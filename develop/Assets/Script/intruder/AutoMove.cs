@@ -7,13 +7,18 @@ public class AutoMove : MonoBehaviour
     [SerializeField]
     private float speed = 3;
     [SerializeField]
+    private float attackDis = 0.5f;
+    [SerializeField]
     private Animator ani;
     private Vector3 moveTo = new(0f, 0f, 0f);
+    private Coroutine moveRoutine = null;
     private GameObject purpose = null;
+    public GameObject weapon = null;
+    private Coroutine attackRoutine = null;
 
     void Start()
     {
-        StartCoroutine(AutoMoving());
+        moveRoutine = StartCoroutine(AutoMoving());
     }
 
     void Update()
@@ -43,11 +48,8 @@ public class AutoMove : MonoBehaviour
             }
             else if (purpose.CompareTag("Border"))
             {
-                Debug.Log("before moving");
                 MoveToPurpose(desPos: new Vector3(0f, 0f, 0f));
-                Debug.Log("before cooltime");
                 yield return new WaitForSeconds(Random.Range(5f, 9f));
-                Debug.Log("after cooltime");
             }
         }
     }
@@ -62,6 +64,10 @@ public class AutoMove : MonoBehaviour
     public void SetPurpose(GameObject newPurpose)
     {
         purpose = newPurpose;
+    }
+    public float GetAttackDis()
+    {
+        return attackDis;
     }
     public GameObject GetPurpose()
     {
@@ -83,11 +89,11 @@ public class AutoMove : MonoBehaviour
         Vector3 myPos = transform.position;
         float differX = myPos.x - purposePos.x;
         float differY = myPos.y - purposePos.y;
-        if (differX < -1)
+        if (differX < -(attackDis / 6.4))
         {
             moveTo.x = reverse ? -1 : 1;
         }
-        else if (differX > 1)
+        else if (differX > attackDis / 6.4)
         {
             moveTo.x = reverse ? 1 : -1;
         }
@@ -95,11 +101,11 @@ public class AutoMove : MonoBehaviour
         {
             moveTo.x = 0;
         }
-        if (differY < -1)
+        if (differY < -(attackDis / 6.4))
         {
             moveTo.y = reverse ? -1 : 1;
         }
-        else if (differY > 1)
+        else if (differY > attackDis / 6.4)
         {
             moveTo.y = reverse ? 1 : -1;
         }
@@ -109,6 +115,32 @@ public class AutoMove : MonoBehaviour
         }
     }
 
+    public void AutoAttack()
+    {
+        attackRoutine = StartCoroutine(AutoAttackRoutine());
+    }
+    public void StopAutoAttack()
+    {
+        if (attackRoutine != null)
+        {
+            StopCoroutine(attackRoutine);
+        }
+    }
+
+    IEnumerator AutoAttackRoutine()
+    {
+        while (true)
+        {
+            if (purpose == null || purpose.tag != "Tower" || weapon == null)
+            {
+                StopAutoAttack();
+            }
+            ani.SetTrigger("attack");
+            yield return new WaitForSeconds(0.5f);
+            Instantiate(weapon, purpose.transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(1f, 2f));
+        }
+    }
     // private void Controlled()
     // {
     //     StopCoroutine("ChangeMove");
