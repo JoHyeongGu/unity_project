@@ -9,6 +9,7 @@ public class Tower : MonoBehaviour
     [SerializeField]
     private float heart = 10;
 
+
     public float[] GetHeart()
     {
         return new float[2] { heart, maxHeart };
