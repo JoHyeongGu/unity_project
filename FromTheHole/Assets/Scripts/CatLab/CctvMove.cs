@@ -2,22 +2,27 @@ using UnityEngine;
 
 public class CctvMove : MonoBehaviour
 {
+    public bool activate = true;
     public Transform target;
     [SerializeField] private float zoomSpeed = 10f;
     [SerializeField] private float minFov = 15f;
     [SerializeField] private float maxFov = 70f;
 
-    void Start()
-    {
-        Debug.Log("1. 방향키 또는 WASD로 캐릭터 이동 가능 \n2. Z, X 혹은 마우스 휠로 카메라 줌 가능");
-    }
     void Update()
+    {
+        if (activate)
+        {
+            LookTarget();
+            ZoomCamera();
+        }
+    }
+
+    void LookTarget()
     {
         if (target != null)
         {
             transform.LookAt(target);
         }
-        ZoomCamera();
     }
 
     void ZoomCamera()

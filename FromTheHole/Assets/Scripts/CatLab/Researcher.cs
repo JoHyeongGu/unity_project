@@ -3,10 +3,10 @@ using System.Collections;
 
 public class Researcher : MonoBehaviour
 {
+    private MainState mainState;
     [SerializeField] private float speed;
     private Vector3 moveTo = new Vector3();
     private Animator animator;
-    public MainState mainState;
     private bool canMove = true;
     void Start()
     {
