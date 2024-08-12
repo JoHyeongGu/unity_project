@@ -5,9 +5,8 @@ using UnityEngine.AI;
 
 public class Cat : MonoBehaviour
 {
-    [SerializeField] private bool autoMove = true;
+    public bool autoMove = true;
     [SerializeField] private float speed = 5f;
-    private Vector3 moveTo = new();
     private NavMeshAgent agent;
     private Animator ani;
     private Vector3[] buildingPoints;
@@ -16,6 +15,7 @@ public class Cat : MonoBehaviour
     {
         ani = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        StartCoroutine(MoveAnimation());
     }
 
     void Update()
@@ -26,27 +26,33 @@ public class Cat : MonoBehaviour
     private void Move()
     {
         if (!autoMove) ControledMove();
-        else AutoMove();
     }
 
     private void ControledMove()
     {
+        Vector3 moveTo = new();
         moveTo.x = Input.GetAxis("Horizontal");
         moveTo.z = Input.GetAxis("Vertical");
-        ani.SetBool("walk", moveTo != Vector3.zero);
         transform.position += moveTo * speed * Time.deltaTime;
         if (moveTo != Vector3.zero)
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(-moveTo), speed * Time.deltaTime * 10);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveTo), speed * Time.deltaTime * 10);
     }
 
-    private void AutoMove()
+
+    IEnumerator MoveAnimation()
     {
-        ani.SetBool("walk", agent.destination != transform.position);
+        float dis = 0.2f;
+        while (true)
+        {
+            Vector3 prevPos = transform.position;
+            yield return new WaitForSeconds(0.1f);
+            ani.SetBool("walk", Vector3.Distance(prevPos, transform.position) > dis);
+        }
     }
 
     public void FindMouse(GameObject mouse)
     {
-        StopAllCoroutines();
+        StopCoroutine(MovePointRoutine(new Vector3[4]));
         StartCoroutine(MoveToMouseRoutine(mouse));
     }
 
@@ -77,7 +83,7 @@ public class Cat : MonoBehaviour
                 {
                     yield return new WaitForSeconds(0.1f);
                 }
-                yield return new WaitForSeconds(Random.Range(0.2f, 2f));
+                yield return new WaitForSeconds(Random.Range(0.5f, 2f));
             }
         }
     }

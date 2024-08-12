@@ -15,6 +15,7 @@ public class MoveZone : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
+        if (!cat.autoMove) return;
         if (col.tag == "Mouse")
         {
             mouse = col.gameObject;
