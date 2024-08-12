@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Portal
   - MainState
+  - Ground
+  - Building
+  - Mouse
+  - Cat
   layers:
   - Default
   - TransparentFX

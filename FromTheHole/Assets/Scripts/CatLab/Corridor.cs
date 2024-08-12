@@ -6,6 +6,7 @@ public class Corridor : MonoBehaviour
 {
     private MainState mainState;
     [SerializeField] private string toRoom;
+    [SerializeField] private GameObject toSwitch;
 
     void Start()
     {
@@ -14,6 +15,12 @@ public class Corridor : MonoBehaviour
 
     void OnTriggerEnter()
     {
-        mainState.cameraSwitch(toRoom);
+        mainState.CameraSwitch(toRoom);
+        toSwitch.SetActive(true);
+    }
+
+    void OnTriggerExit()
+    {
+        gameObject.SetActive(false);
     }
 }
