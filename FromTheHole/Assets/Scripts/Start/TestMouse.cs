@@ -6,6 +6,6 @@ public class TestMouse : MonoBehaviour
 {
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.tag == "Cat") Destroy(this.gameObject);
+        // if (collider.tag == "Cat") Destroy(this.gameObject);
     }
 }

@@ -7,15 +7,17 @@ public class Cat : MonoBehaviour
 {
     public bool autoMove = true;
     [SerializeField] private float speed = 5f;
-    private NavMeshAgent agent;
-    private Animator ani;
     private Vector3[] buildingPoints;
+    private Coroutine movePointRoutine;
+    private NavMeshAgent agent;
+    private GameObject targetMouse;
+    private Animator ani;
 
     void Start()
     {
         ani = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        StartCoroutine(MoveAnimation());
+        SetAnimation();
     }
 
     void Update()
@@ -38,21 +40,46 @@ public class Cat : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveTo), speed * Time.deltaTime * 10);
     }
 
+    private void SetAnimation()
+    {
+        StartCoroutine(MoveAnimation());
+        StartCoroutine(AttackAnimation());
+    }
 
     IEnumerator MoveAnimation()
     {
-        float dis = 0.2f;
+        float moveDis = 0.1f;
         while (true)
         {
             Vector3 prevPos = transform.position;
             yield return new WaitForSeconds(0.1f);
-            ani.SetBool("walk", Vector3.Distance(prevPos, transform.position) > dis);
+            ani.SetBool("walk", Vector3.Distance(prevPos, transform.position) > moveDis);
+        }
+    }
+
+    IEnumerator AttackAnimation()
+    {
+        float targetDis = 2f;
+        while (true)
+        {
+            if (targetMouse == null)
+            {
+                yield return new WaitForSeconds(0.1f);
+                continue;
+            }
+            if (Vector3.Distance(transform.position, targetMouse.transform.position) < targetDis)
+            {
+                ani.SetTrigger("attack");
+                yield return new WaitForSeconds(1);
+            }
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
     public void FindMouse(GameObject mouse)
     {
-        StopCoroutine(MovePointRoutine(new Vector3[4]));
+        targetMouse = mouse;
+        StopCoroutine(movePointRoutine);
         StartCoroutine(MoveToMouseRoutine(mouse));
     }
 
@@ -69,7 +96,7 @@ public class Cat : MonoBehaviour
     public void SetDesWithPointArray(Vector3[] pointArray)
     {
         buildingPoints = pointArray;
-        StartCoroutine(MovePointRoutine(pointArray));
+        movePointRoutine = StartCoroutine(MovePointRoutine(pointArray));
     }
 
     IEnumerator MovePointRoutine(Vector3[] pointArray)
