@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveZone : MonoBehaviour
+public class CatView : MonoBehaviour
 {
 
     private Cat cat;
