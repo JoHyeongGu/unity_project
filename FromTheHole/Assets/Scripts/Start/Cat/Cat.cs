@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Cat : MonoBehaviour
 {
+    private MethodTool tool = new MethodTool();
     public bool autoMove = true;
     [SerializeField] private float speed = 5f;
-    private Vector3[] buildingPoints;
-    private Coroutine movePointRoutine;
+    private Coroutine moveAroundBuilding;
     private NavMeshAgent agent;
-    private GameObject targetMouse;
+    private GameObject building;
+    private GameObject mouse;
     private Animator ani;
 
     void Start()
@@ -62,12 +64,12 @@ public class Cat : MonoBehaviour
         float targetDis = 2f;
         while (true)
         {
-            if (targetMouse == null)
+            if (mouse == null)
             {
                 yield return new WaitForSeconds(0.1f);
                 continue;
             }
-            if (Vector3.Distance(transform.position, targetMouse.transform.position) < targetDis)
+            if (Vector3.Distance(transform.position, mouse.transform.position) < targetDis)
             {
                 ani.SetTrigger("attack");
                 yield return new WaitForSeconds(1);
@@ -76,10 +78,10 @@ public class Cat : MonoBehaviour
         }
     }
 
-    public void FindMouse(GameObject mouse)
+    public void FindMouse(GameObject find)
     {
-        targetMouse = mouse;
-        StopCoroutine(movePointRoutine);
+        mouse = find;
+        StopCoroutine(moveAroundBuilding);
         StartCoroutine(MoveToMouseRoutine(mouse));
     }
 
@@ -90,22 +92,23 @@ public class Cat : MonoBehaviour
             agent.SetDestination(mouse.transform.position);
             yield return new WaitForSeconds(1f);
         }
-        SetDesWithPointArray(buildingPoints);
+        MoveAroundBuilding();
     }
 
-    public void SetDesWithPointArray(Vector3[] pointArray)
+    public void MoveAroundBuilding(GameObject find = null)
     {
-        buildingPoints = pointArray;
-        movePointRoutine = StartCoroutine(MovePointRoutine(pointArray));
+        if (find != null) building = find;
+        GameObject[] corners = tool.FindChildObjectsWithTag(building, "BuildingCorner");
+        moveAroundBuilding = StartCoroutine(WalkOnTheCorners(SortCorners(corners)));
     }
 
-    IEnumerator MovePointRoutine(Vector3[] pointArray)
+    IEnumerator WalkOnTheCorners(Transform[] corners)
     {
         while (true)
         {
-            foreach (Vector3 point in pointArray)
+            foreach (Transform corner in corners)
             {
-                agent.SetDestination(point);
+                agent.SetDestination(corner.position);
                 while (agent.remainingDistance > agent.stoppingDistance)
                 {
                     yield return new WaitForSeconds(0.1f);
@@ -113,5 +116,40 @@ public class Cat : MonoBehaviour
                 yield return new WaitForSeconds(Random.Range(0.5f, 2f));
             }
         }
+    }
+
+    private Transform[] SortCorners(GameObject[] corners)
+    {
+        List<Transform> sorted = new List<Transform>();
+        GameObject close = null;
+        float GetDistance(GameObject point)
+        {
+            return Vector3.Distance(transform.position, point.transform.position);
+        }
+        foreach (GameObject corner in corners)
+        {
+            if (close == null) close = corner;
+            else if (GetDistance(corner) < GetDistance(close))
+                close = corner;
+        }
+        while (sorted.Count < 4)
+        {
+            foreach (GameObject corner in corners)
+            {
+                if (sorted.Count >= 4) break;
+                if (sorted.Count == 0 && corner.name != close.name) continue;
+                sorted.Add(corner.transform);
+            }
+        }
+        foreach (GameObject corner in corners)
+        {
+            Debug.Log(corner.transform.position);
+        }
+        Debug.Log('\n');
+        foreach (Transform corner in sorted)
+        {
+            Debug.Log(corner.position);
+        }
+        return sorted.ToArray();
     }
 }

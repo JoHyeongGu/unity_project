@@ -10,6 +10,8 @@ TagManager:
   - Building
   - Mouse
   - Cat
+  - BuildingCore
+  - BuildingCorner
   layers:
   - Default
   - TransparentFX
