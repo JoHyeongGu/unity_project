@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,11 +7,13 @@ public class Cat : MonoBehaviour
 {
     private MethodTool tool = new MethodTool();
     public bool autoMove = true;
-    [SerializeField] private float speed = 5f;
+    public float speed = 5f;
+    // [SerializeField] private float hp = 10f;
+    [SerializeField] private float atk = 1f;
     private Coroutine moveAroundBuilding;
     private NavMeshAgent agent;
     private GameObject building;
-    private GameObject mouse;
+    private Mouse mouse;
     private Animator ani;
 
     void Start()
@@ -30,13 +31,15 @@ public class Cat : MonoBehaviour
     private void Move()
     {
         if (!autoMove) ControledMove();
+        else
+        {
+            if (mouse != null) agent.SetDestination(mouse.transform.position);
+        }
     }
 
     private void ControledMove()
     {
-        Vector3 moveTo = new();
-        moveTo.x = Input.GetAxis("Horizontal");
-        moveTo.z = Input.GetAxis("Vertical");
+        Vector3 moveTo = new(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
         transform.position += moveTo * speed * Time.deltaTime;
         if (moveTo != Vector3.zero)
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveTo), speed * Time.deltaTime * 10);
@@ -45,7 +48,6 @@ public class Cat : MonoBehaviour
     private void SetAnimation()
     {
         StartCoroutine(MoveAnimation());
-        StartCoroutine(AttackAnimation());
     }
 
     IEnumerator MoveAnimation()
@@ -59,7 +61,7 @@ public class Cat : MonoBehaviour
         }
     }
 
-    IEnumerator AttackAnimation()
+    IEnumerator Attack()
     {
         float targetDis = 2f;
         while (true)
@@ -78,22 +80,28 @@ public class Cat : MonoBehaviour
         }
     }
 
-    public void FindMouse(GameObject find)
+    public float GetAtk()
+    {
+        return atk;
+    }
+
+    public void FindMouse(Mouse find)
     {
         mouse = find;
         StopCoroutine(moveAroundBuilding);
-        StartCoroutine(MoveToMouseRoutine(mouse));
+        // StartCoroutine(MoveToMouseRoutine());
+        StartCoroutine(Attack());
     }
 
-    IEnumerator MoveToMouseRoutine(GameObject mouse)
-    {
-        while (mouse != null)
-        {
-            agent.SetDestination(mouse.transform.position);
-            yield return new WaitForSeconds(1f);
-        }
-        MoveAroundBuilding();
-    }
+    // IEnumerator MoveToMouseRoutine()
+    // {
+    // while (mouse != null)
+    // {
+    //     try { agent.SetDestination(mouse.transform.position); } finally { }
+    //     yield return new WaitForSeconds(1f);
+    // }
+    // MoveAroundBuilding();
+    // }
 
     public void MoveAroundBuilding(GameObject find = null)
     {
@@ -140,15 +148,6 @@ public class Cat : MonoBehaviour
                 if (sorted.Count == 0 && corner.name != close.name) continue;
                 sorted.Add(corner.transform);
             }
-        }
-        foreach (GameObject corner in corners)
-        {
-            Debug.Log(corner.transform.position);
-        }
-        Debug.Log('\n');
-        foreach (Transform corner in sorted)
-        {
-            Debug.Log(corner.position);
         }
         return sorted.ToArray();
     }

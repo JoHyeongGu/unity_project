@@ -5,7 +5,7 @@ using UnityEngine;
 public class CatView : MonoBehaviour
 {
     private Cat cat;
-    private GameObject mouse;
+    private Mouse mouse;
 
     void Start()
     {
@@ -17,10 +17,11 @@ public class CatView : MonoBehaviour
         if (!cat.autoMove) return;
         if (col.tag == "Mouse")
         {
-            mouse = col.gameObject;
+            Debug.Log("쥐 발견!!");
+            mouse = col.gameObject.GetComponent<Mouse>();
             cat.FindMouse(mouse);
         }
-        else if (col.tag == "Building" && mouse == null)
+        else if (mouse == null && col.tag == "Building")
         {
             cat.MoveAroundBuilding(col.gameObject);
         };

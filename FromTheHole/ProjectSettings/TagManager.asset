@@ -12,6 +12,7 @@ TagManager:
   - Cat
   - BuildingCore
   - BuildingCorner
+  - Attack
   layers:
   - Default
   - TransparentFX
