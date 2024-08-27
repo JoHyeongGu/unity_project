@@ -76,7 +76,7 @@ public class Cat : Animal
     public void FindMouse(Mouse find)
     {
         mouse = find;
-        StopCoroutine(moveAroundBuilding);
+        if (moveAroundBuilding != null) StopCoroutine(moveAroundBuilding);
         StartCoroutine(Attack());
     }
 
