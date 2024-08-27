@@ -16,6 +16,7 @@ public class Animal : MonoBehaviour
     {
         ani = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        agent.speed = speed;
     }
 
     public float GetAtk()
@@ -27,6 +28,6 @@ public class Animal : MonoBehaviour
     {
         hp -= enimy.GetAtk();
         transform.position += new Vector3(0f, 1f, 0f);
-        Debug.Log($"Mouse HP: {hp} / 100");
+        Debug.Log($"HP: {hp}");
     }
 }

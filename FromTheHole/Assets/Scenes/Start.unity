@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 70109839}
   - component: {fileID: 70109838}
   - component: {fileID: 70109837}
+  - component: {fileID: 70109840}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -215,6 +216,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 80, y: 0, z: 0}
+--- !u!114 &70109840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70109836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7f88dff1b21a9d4a8422b63e8d35ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSensitivity: 400
+  zoomSpeed: 50
+  minFov: 15
+  maxFov: 70
 --- !u!1 &86486495
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,7 +718,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -334000983
   m_Radius: 0.5
-  m_Speed: 5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 200
@@ -795,8 +812,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoMove: 1
-  speed: 5
-  hp: 100
+  speed: 3
+  hp: 20
   atk: 1
 --- !u!95 &735777798
 Animator:
@@ -1670,7 +1687,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoMove: 1
   speed: 5
-  atk: 2
+  hp: 100
+  atk: 5
 --- !u!195 &1864140066
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1681,7 +1699,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 7
+  m_Speed: 5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 240

@@ -18,7 +18,7 @@ public class Mouse : Animal
         if (cat != null)
         {
             Vector3 dirToMe = cat.transform.position - transform.position;
-            try { agent.SetDestination(transform.position - dirToMe); } finally { }
+            agent.SetDestination(transform.position - dirToMe);
         }
         else
         {
