@@ -1,23 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class Mouse : MonoBehaviour
+public class Mouse : Animal
 {
-    public bool autoMove = true;
-    public float speed;
-    [SerializeField] private float hp = 100f;
-    // [SerializeField] private float atk = 1f;
     private GameObject cat;
     private GameObject building;
-    private NavMeshAgent agent;
 
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        base.Init();
     }
-
 
     void Update()
     {
@@ -46,16 +39,12 @@ public class Mouse : MonoBehaviour
         building = find;
     }
 
-    public void Attacked(Collider atkObj)
-    {
-        Cat _cat = atkObj.gameObject.GetComponentInParent<Cat>();
-        hp -= _cat.GetAtk();
-        transform.position += new Vector3(0f, 1f, 0f);
-        Debug.Log($"Mouse HP: {hp} / 100");
-    }
-
     void OnTriggerEnter(Collider col)
     {
-        if (col.tag == "Attack") Attacked(col);
+        if (col.tag == "Attack")
+        {
+            Cat cat = col.gameObject.GetComponentInParent<Cat>();
+            Attacked(cat);
+        }
     }
 }

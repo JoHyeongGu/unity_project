@@ -12,7 +12,7 @@ public class Animal : MonoBehaviour
     protected NavMeshAgent agent;
     protected Animator ani;
 
-    void Start()
+    protected void Init()
     {
         ani = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
@@ -23,9 +23,8 @@ public class Animal : MonoBehaviour
         return atk;
     }
 
-    public void Attacked(Collider atkObj)
+    public void Attacked(Animal enimy)
     {
-        Animal enimy = atkObj.gameObject.GetComponentInParent<Animal>();
         hp -= enimy.GetAtk();
         transform.position += new Vector3(0f, 1f, 0f);
         Debug.Log($"Mouse HP: {hp} / 100");

@@ -3,23 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Cat : MonoBehaviour
+public class Cat : Animal
 {
     private MethodTool tool = new MethodTool();
-    public bool autoMove = true;
-    public float speed = 5f;
-    // [SerializeField] private float hp = 10f;
-    [SerializeField] private float atk = 1f;
     private Coroutine moveAroundBuilding;
-    private NavMeshAgent agent;
     private GameObject building;
     private Mouse mouse;
-    private Animator ani;
 
     void Start()
     {
-        ani = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
+        base.Init();
         SetAnimation();
     }
 
@@ -80,28 +73,12 @@ public class Cat : MonoBehaviour
         }
     }
 
-    public float GetAtk()
-    {
-        return atk;
-    }
-
     public void FindMouse(Mouse find)
     {
         mouse = find;
         StopCoroutine(moveAroundBuilding);
-        // StartCoroutine(MoveToMouseRoutine());
         StartCoroutine(Attack());
     }
-
-    // IEnumerator MoveToMouseRoutine()
-    // {
-    // while (mouse != null)
-    // {
-    //     try { agent.SetDestination(mouse.transform.position); } finally { }
-    //     yield return new WaitForSeconds(1f);
-    // }
-    // MoveAroundBuilding();
-    // }
 
     public void MoveAroundBuilding(GameObject find = null)
     {
