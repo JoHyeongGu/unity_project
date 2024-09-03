@@ -1,0 +1,82 @@
+.test-btn {
+    width: 500px;
+    height: 200px;
+    position: absolute;
+    background-color: rgba(0, 39, 128, 0.8);
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+    border-bottom-left-radius: 40px;
+    border-left-color: rgba(0, 0, 0, 0.25);
+    border-right-color: rgba(0, 0, 0, 0.25);
+    border-top-color: rgba(0, 0, 0, 0.25);
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    font-size: 62px;
+    color: rgb(255, 255, 255);
+    -unity-font: url("project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=908a1927d2d840d4082d2c01ce8f0d55&type=3#NotInter-Regular");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    letter-spacing: -7px;
+    word-spacing: -10px;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-out;
+}
+
+.test-btn:hover {
+    scale: 1.05 1.1;
+}
+
+.test-btn:active {
+    background-color: rgb(36, 99, 201);
+}
+
+.close-btn {
+    width: 100px;
+    height: 100px;
+    background-color: rgba(188, 188, 188, 0);
+    background-image: url("project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=8228938214290033325&guid=908a1927d2d840d4082d2c01ce8f0d55&type=3#console.erroricon");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    position: absolute;
+    right: 0;
+}
+
+.close-btn:hover {
+    -unity-background-image-tint-color: rgb(182, 182, 182);
+}
+
+.close-btn:active {
+    -unity-background-image-tint-color: rgb(0, 0, 0);
+}
+
+.window--down {
+    background-image: url("project://database/Assets/Asset/Test/KayKit/KayKit%20-%20Free%20Sample%20(for%20Unity)/Textures/character_green.png?fileID=2800000&guid=34287c5b0e3f65344800a85881e13e25&type=3#character_green");
+    width: 1081px;
+    height: 686px;
+    translate: 0 150%;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-in-out-elastic;
+    position: absolute;
+}
+
+.window--up {
+    transition-duration: 0.5s;
+    translate: 0 0;
+    transition-timing-function: ease-in-out-elastic;
+    position: absolute;
+}
+
+.window-back--down {
+    background-color: rgba(0, 0, 0, 0);
+    width: 100%;
+    height: 100%;
+    transition-duration: 1s;
+}
+
+.window-back--up {
+    background-color: rgba(0, 0, 0, 0.72);
+    transition-duration: 1s;
+}

@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Test/testStyleSheet.uss?fileID=7433441132597879392&amp;guid=c740c41d006e5794aad551d2a4e9a0a6&amp;type=3#testStyleSheet" />
+    <ui:VisualElement name="TestGround" style="flex-grow: 1; width: 100%; height: 100%; background-color: rgba(0, 255, 51, 0.17); align-items: center; justify-content: center; align-self: center;">
+        <ui:Button text="Game Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StartBtn" class="test-btn" />
+    </ui:VisualElement>
+    <ui:VisualElement name="TopGround" style="flex-grow: 0; position: absolute; align-items: center; align-self: auto; justify-content: center; width: 100%; height: 100%; flex-shrink: 0; visibility: visible; display: flex; background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement name="WindowBack" class="window-back--down" />
+        <ui:VisualElement name="TopWindow" class="window--down">
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="CloseBtn" class="close-btn" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
